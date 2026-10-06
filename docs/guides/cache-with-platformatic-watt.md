@@ -98,7 +98,7 @@ by Redis or Valkey when you need the cache to survive restarts or be shared acro
 A few consequences worth knowing:
 
 - **Freshness is standard HTTP.** Entries are stored and revalidated according to the response's
-  `Cache-Control` directives. `cacheByDefault` supplies a fallback lifetime, in seconds, for
+  `Cache-Control` directives. `cacheByDefault` supplies a fallback lifetime, in milliseconds, for
   upstreams that send no expiration headers at all.
 - **`GET` and `HEAD` are cached by default**, configurable through `methods`. The `origins` option
   restricts caching to a whitelist of upstreams, and accepts regular expressions.
