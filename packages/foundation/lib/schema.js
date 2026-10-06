@@ -1335,7 +1335,7 @@ export const runtimeProperties = {
           },
           cacheByDefault: {
             type: 'integer',
-            description: 'Default cache duration in seconds for responses without explicit expiration headers.'
+            description: 'Default cache duration in milliseconds for responses without explicit expiration headers.'
           },
           type: {
             type: 'string',

@@ -693,6 +693,39 @@ test('should use cacheByDefault for responses without explicit expiration', asyn
   }
 })
 
+test('should interpret cacheByDefault as milliseconds', async t => {
+  const configFile = join(fixturesDir, 'http-cache', 'platformatic.json')
+  const app = await createRuntime(configFile, null, {
+    async transform (config, ...args) {
+      config = await transform(config, ...args)
+      config.httpCache = {
+        cacheByDefault: 1000 // 1 second, would be ~17 minutes if read as seconds
+      }
+      return config
+    }
+  })
+  const entryUrl = await app.start()
+
+  t.after(() => app.close())
+
+  const res1 = await request(entryUrl + '/service-1/no-cache-header-counter')
+  strictEqual(res1.statusCode, 200)
+  const body1 = await res1.body.json()
+  strictEqual(body1.counter, 1)
+
+  const res2 = await request(entryUrl + '/service-1/no-cache-header-counter')
+  strictEqual(res2.statusCode, 200)
+  const body2 = await res2.body.json()
+  strictEqual(body2.counter, 1) // Cached
+
+  await sleep(1500)
+
+  const res3 = await request(entryUrl + '/service-1/no-cache-header-counter')
+  strictEqual(res3.statusCode, 200)
+  const body3 = await res3.body.json()
+  strictEqual(body3.counter, 2) // Expired after 1000ms
+})
+
 test('should not cache responses without explicit expiration when cacheByDefault is not set', async t => {
   const configFile = join(fixturesDir, 'http-cache', 'platformatic.json')
   const app = await createRuntime(configFile, null, {

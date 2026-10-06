@@ -522,7 +522,7 @@ export interface PlatformaticComposerConfig {
            */
           origins?: string[];
           /**
-           * Default cache duration in seconds for responses without explicit expiration headers.
+           * Default cache duration in milliseconds for responses without explicit expiration headers.
            */
           cacheByDefault?: number;
           /**
